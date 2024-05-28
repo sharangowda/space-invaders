@@ -49,6 +49,24 @@ bullet_state = "ready"
 
 # Score
 score = 0
+font = pygame.font.Font('freesansbold.ttf', 32)
+
+textX = 10
+textY = 10
+
+# Game over font
+
+go_font = pygame.font.Font('freesansbold.ttf', 64)
+
+
+def game_over_text():
+    go_render = go_font.render("GAME OVER", True, (255, 255, 255))
+    screen.blit(go_render, (200, 250))
+
+
+def show_score(x, y):
+    score_render = font.render(f"Score: {score}", True, (255, 255, 255))
+    screen.blit(score_render, (x, y))
 
 
 def player(x, y):
@@ -110,6 +128,13 @@ while running:
 
     # Enemy Movement
     for i in range(ene_num):
+        # GameOver
+        if ene_startY[i] > 480:
+            for j in range(ene_num):
+                ene_startY[j] = 2000
+            game_over_text()
+            break
+
         ene_startX[i] += eneX_change[i]
 
         if ene_startX[i] <= 10:
@@ -126,7 +151,6 @@ while running:
             bulletY = 540
             bullet_state = "ready"
             score += 1
-            print(score)
             ene_startX[i] = random.randint(11, 761)
             ene_startY[i] = random.randint(10, 421)
 
@@ -142,5 +166,5 @@ while running:
         bulletY -= bulletY_change
 
     player(startX, startY)
-
+    show_score(textX, textY)
     pygame.display.update()
